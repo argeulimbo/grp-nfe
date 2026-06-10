@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:18
+    container_name: notafiscal-db
+    environment:
+      POSTGRES_DB: notafiscal
+      POSTGRES_USER: nfuser
+      POSTGRES_PASSWORD: a
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql
+
+volumes:
+  pgdata:
