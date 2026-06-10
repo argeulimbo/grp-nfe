@@ -2,10 +2,7 @@ package grp.nfe.service;
 
 import grp.nfe.model.Cliente;
 import grp.nfe.repository.ClienteRepository;
-import jakarta.validation.ValidationException;
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

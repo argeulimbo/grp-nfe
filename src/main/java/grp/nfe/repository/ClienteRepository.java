@@ -9,5 +9,6 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
     boolean existByCodigo(Integer codigo);
     Optional<Cliente> findByCodigo(Integer codigo);
+    Optional<Cliente> findByNome(String nome);
 
 }
