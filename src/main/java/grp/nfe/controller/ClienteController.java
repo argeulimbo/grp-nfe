@@ -31,13 +31,13 @@ public class ClienteController {
         return ResponseEntity.ok(cliente);
     }
 
-    @PutMapping
+    @PutMapping("/{codigo}")
     public ResponseEntity<Cliente> update(@PathVariable Integer codigo, @RequestBody Cliente clienteToUpdate) {
-        var cliente = clienteService.update(clienteToUpdate);
+        var cliente = clienteService.update(codigo, clienteToUpdate);
         return ResponseEntity.ok(cliente);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{codigo}")
     public ResponseEntity<Cliente> delete(@PathVariable Integer codigo) {
         clienteService.delete(codigo);
         return ResponseEntity.noContent().build();

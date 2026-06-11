@@ -35,13 +35,12 @@ public class ClienteService {
         return clienteRepository.save(cliente);
     }
 
-    public Cliente update(Cliente cliente) {
-        if (!clienteRepository.findByCodigo(cliente.getCodigo()).isPresent()) {
-            throw new IllegalArgumentException("Não existe cliente cadastrado com este código!");
-        }
-        Cliente clienteAntigo = clienteRepository.findByCodigo(cliente.getCodigo()).get();
-        clienteAntigo.setNome(cliente.getNome());
-        return clienteRepository.save(clienteAntigo);
+    public Cliente update(Integer codigo, Cliente clienteToUpdate) {
+        Cliente cliente =
+                clienteRepository.findByCodigo(codigo)
+                        .orElseThrow(() -> new IllegalArgumentException("Não existe cliente cadastrado com este código!"));
+        cliente.setNome(clienteToUpdate.getNome());
+        return clienteRepository.save(cliente);
     }
 
     public void delete(Integer codigo) {

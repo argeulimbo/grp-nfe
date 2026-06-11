@@ -31,13 +31,13 @@ public class ProdutoController {
         return ResponseEntity.ok(produto);
     }
 
-    @PutMapping
+    @PutMapping("/{codigo}")
     public ResponseEntity<Produto> update(@PathVariable Integer codigo, @RequestBody Produto produtoToUpdate) {
-        var produto = produtoService.update(produtoToUpdate);
+        var produto = produtoService.update(codigo, produtoToUpdate);
         return ResponseEntity.ok(produto);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{codigo}")
     public ResponseEntity<Produto> delete(@PathVariable Integer codigo) {
         produtoService.delete(codigo);
         return ResponseEntity.noContent().build();

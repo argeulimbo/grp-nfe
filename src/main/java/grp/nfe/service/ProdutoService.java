@@ -35,14 +35,13 @@ public class ProdutoService {
         return produtoRepository.save(produto);
     }
 
-    public Produto update(Produto produto) {
-        if (!produtoRepository.findByCodigo(produto.getCodigo()).isPresent()) {
-            throw new IllegalArgumentException("Não existe produto cadastrado com o código fornecido!");
-        }
-        Produto produtoAntigo = produtoRepository.findByCodigo(produto.getCodigo()).get();
-        produtoAntigo.setDescricao(produto.getDescricao());
-        produtoAntigo.setValorUnitario(produto.getValorUnitario());
-        return produtoRepository.save(produtoAntigo);
+    public Produto update(Integer codigo, Produto produtoToUpdate) {
+        Produto produto =
+                produtoRepository.findByCodigo(codigo)
+                        .orElseThrow(() -> new IllegalArgumentException("Não existe produto cadastrado com este código!"));
+        produto.setDescricao(produtoToUpdate.getDescricao());
+        produto.setValorUnitario(produtoToUpdate.getValorUnitario());
+        return produtoRepository.save(produto);
     }
 
     public void delete(Integer codigo) {
