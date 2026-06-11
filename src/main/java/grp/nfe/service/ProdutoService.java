@@ -5,7 +5,6 @@ import grp.nfe.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -15,38 +14,41 @@ public class ProdutoService {
     @Autowired
     private ProdutoRepository produtoRepository;
 
-    public List<Produto> listarTodos() {
+    public Iterable<Produto> buscarTodosProdutos() {
         return produtoRepository.findAll();
     }
 
     public Produto buscarPorCodigo(Integer codigo) {
         Optional<Produto> produto = produtoRepository.findByCodigo(codigo);
-        return  produto.orElseThrow(() -> new NoSuchElementException("Produto não encontrado - código: " + codigo));
+        return produto.orElseThrow(() -> new NoSuchElementException("Nenhum produto encontrado com o código fornecido!"));
+    }
+
+    public Produto buscarPordescricao(String descricao) {
+        Optional<Produto> produto = produtoRepository.findByDescricao(descricao);
+        return produto.orElseThrow(() -> new NoSuchElementException("Nenhum produto encontraado com o descricao fornecido!"));
     }
 
     public Produto create(Produto produto) {
-        if (produto.getCodigo() == null) {
-            throw new IllegalArgumentException("O código do produto é obrigatório!");
+        if (produtoRepository.findByCodigo(produto.getCodigo()).isPresent()) {
+            throw new IllegalArgumentException("Já existe produto cadastrado com o mesmo código!");
         }
-        if (produto.getDescricao() == null || produto.getDescricao().trim().equals("") || produto.getDescricao().isBlank()) {
-            throw new IllegalArgumentException("A descrição do produto é obrigatória!");
-        }
-        if (produtoRepository.existsByCodigo(produto.getCodigo())) {
-            throw new IllegalArgumentException("Já existe um produto cadastrado com o mesmo código: " + produto.getCodigo());
-        }
-        return  produtoRepository.save(produto);
+        return produtoRepository.save(produto);
     }
 
     public Produto update(Produto produto) {
-        if (produto.getCodigo() == null || produto.getCodigo() == "" || produto.getCodigo()) {
-
+        if (!produtoRepository.findByCodigo(produto.getCodigo()).isPresent()) {
+            throw new IllegalArgumentException("Não existe produto cadastrado com o código fornecido!");
         }
+        Produto produtoAntigo = produtoRepository.findByCodigo(produto.getCodigo()).get();
+        produtoAntigo.setDescricao(produto.getDescricao());
+        produtoAntigo.setValorUnitario(produto.getValorUnitario());
+        return produtoRepository.save(produtoAntigo);
     }
 
     public void delete(Integer codigo) {
-        Produto produto =  buscarPorCodigo(codigo);
-        produtoRepository.delete(produto);
+        if (codigo == null || !produtoRepository.existsByCodigo(codigo)) {
+            throw new NoSuchElementException("Não foi possível encontrar o produto com o código especificado para exclusão!");
+        }
     }
-
 
 }

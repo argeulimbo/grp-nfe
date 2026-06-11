@@ -20,7 +20,7 @@ public class ItemNotaFiscal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne()
     @JoinColumn(name = "nota_fiscal_id")
     private NotaFiscal notaFiscal;
 

@@ -24,19 +24,18 @@ public class NotaFiscal {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String numero;
+    private Integer numero;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-    @ManyToOne(optional = false)
     private LocalDate dataEmissao;
 
     @Column(nullable = false)
     private BigDecimal valorTotal = BigDecimal.ZERO;
 
-    @OneToMany(mappedBy = "notafiscal", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "notaFiscal", cascade = CascadeType.ALL)
     private List<ItemNotaFiscal> itens = new ArrayList<>();
 
 }

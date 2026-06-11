@@ -5,8 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ItemNotaFiscalRepository extends JpaRepository<ItemNotaFiscal, Long> {
+public interface ItemNotaFiscalRepository extends JpaRepository<ItemNotaFiscal,Integer> {
 
-    List<ItemNotaFiscal> findByNotaFiscalNumeroOrderByNumeroItem(String numero);
+    List<ItemNotaFiscal> findByNotaFiscalNumeroOrderByNumeroItem(Integer codigo);
 
 }
