@@ -44,12 +44,10 @@ public class ClienteService {
     }
 
     public void delete(Integer codigo) {
-        if (codigo == null || !clienteRepository.existsByCodigo(codigo)) {
-            throw new IllegalArgumentException("Não foi possível encontrar o cliente com o código especificado para exclusão!");
-        } else {
-            Cliente cliente = clienteRepository.findByCodigo(codigo).orElse(null);
-            clienteRepository.delete(cliente);
-        }
+        Cliente cliente =
+                clienteRepository.findByCodigo(codigo)
+                        .orElseThrow(() -> new IllegalArgumentException("Não existe cliente com o código fornecido para exclusão!"));
+        clienteRepository.delete(cliente);
     }
 
 }
