@@ -5,6 +5,7 @@ import grp.nfe.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -23,9 +24,8 @@ public class ClienteService {
         return cliente.orElseThrow(() -> new NoSuchElementException("Nenhum cliente encontrado com o código fornecido"));
     }
 
-    public Cliente buscarPorNome(String nome) {
-        Optional<Cliente> cliente = clienteRepository.findByNome(nome);
-        return cliente.orElseThrow(() -> new NoSuchElementException("Nenhum cliente encontrado com o nome fornecido!"));
+    public List<Cliente> buscarPorNome(String nome) {
+        return clienteRepository.findByNomeContainingIgnoreCase(nome);
     }
 
     public Cliente create(Cliente cliente) {
@@ -49,5 +49,4 @@ public class ClienteService {
                         .orElseThrow(() -> new IllegalArgumentException("Não existe cliente com o código fornecido para exclusão!"));
         clienteRepository.delete(cliente);
     }
-
 }

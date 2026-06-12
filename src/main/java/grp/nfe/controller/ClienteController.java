@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -31,6 +32,17 @@ public class ClienteController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(e.getMessage());
         }
+    }
+
+    @GetMapping("/buscar")
+    public ResponseEntity<List<Cliente>> findByNome(@RequestParam String nome){
+        List<Cliente> clientes =
+                clienteService.buscarPorNome(nome);
+
+        if (clientes.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(clientes);
     }
 
     @PostMapping

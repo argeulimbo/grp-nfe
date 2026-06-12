@@ -45,9 +45,9 @@ public class ProdutoService {
     }
 
     public void delete(Integer codigo) {
-        if (codigo == null || !produtoRepository.existsByCodigo(codigo)) {
-            throw new NoSuchElementException("Não foi possível encontrar o produto com o código especificado para exclusão!");
-        }
+        Produto produto =
+                produtoRepository.findByCodigo(codigo)
+                        .orElseThrow(() -> new IllegalArgumentException("Não existe produto com o código fornecido para exclusão!"));
+        produtoRepository.delete(produto);
     }
-
 }
