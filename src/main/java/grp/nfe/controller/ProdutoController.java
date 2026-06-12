@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -33,23 +34,57 @@ public class ProdutoController {
         }
     }
 
+    @GetMapping("/buscar")
+    public ResponseEntity<List<Produto>> findByDescricao(@RequestParam String descricao) {
+        List<Produto> produtos =
+                produtoService.buscarPordescricao(descricao);
+        if (produtos.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(produtos);
+        }
+        return ResponseEntity.ok(produtos);
+    }
+
     @PostMapping
-    public ResponseEntity<Produto> create(@RequestBody Produto produtoToCreate) {
-        var produto = produtoService.create(produtoToCreate);
-        return ResponseEntity.ok(produto);
+    public ResponseEntity<Object> create(@RequestBody Produto produtoToCreate) {
+        try {
+            var produto = produtoService.create(produtoToCreate);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body("Produto: " + produto.getDescricao() + " criado com sucesso!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
     }
 
     @PutMapping("/{codigo}")
-    public ResponseEntity<Produto> update(@PathVariable Integer codigo, @RequestBody Produto produtoToUpdate) {
-        var produto = produtoService.update(codigo, produtoToUpdate);
-        return ResponseEntity.ok(produto);
+    public ResponseEntity<Object> update(@PathVariable Integer codigo, @RequestBody Produto produtoToUpdate) {
+        try {
+            var produto = produtoService.update(codigo, produtoToUpdate);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body("Produto: " + produto.getDescricao() + " atualizado com sucesso!");
+        } catch (IllegalArgumentException e) {
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{codigo}")
-    public ResponseEntity<Produto> delete(@PathVariable Integer codigo) {
-        produtoService.delete(codigo);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Object> delete(@PathVariable Integer codigo) {
+        try {
+            var produtoDeletado = produtoService.buscarPorCodigo(codigo);
+            produtoService.delete(produtoDeletado.getCodigo());
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body("Produto: " + produtoDeletado.getDescricao() + " excluído com sucesso!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+        }
     }
-
-
 }

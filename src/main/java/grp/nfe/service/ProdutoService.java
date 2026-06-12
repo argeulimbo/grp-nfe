@@ -5,6 +5,7 @@ import grp.nfe.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -23,9 +24,8 @@ public class ProdutoService {
         return produto.orElseThrow(() -> new NoSuchElementException("Nenhum produto encontrado com o código fornecido!"));
     }
 
-    public Produto buscarPordescricao(String descricao) {
-        Optional<Produto> produto = produtoRepository.findByDescricao(descricao);
-        return produto.orElseThrow(() -> new NoSuchElementException("Nenhum produto encontraado com o descricao fornecido!"));
+    public List<Produto> buscarPordescricao(String descricao) {
+        return produtoRepository.findByDescricaoContainingIgnoreCase(descricao);
     }
 
     public Produto create(Produto produto) {

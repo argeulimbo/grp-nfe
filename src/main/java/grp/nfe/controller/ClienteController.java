@@ -40,7 +40,8 @@ public class ClienteController {
                 clienteService.buscarPorNome(nome);
 
         if (clientes.isEmpty()) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(clientes);
         }
         return ResponseEntity.ok(clientes);
     }
@@ -77,7 +78,7 @@ public class ClienteController {
     public ResponseEntity<Object> delete(@PathVariable Integer codigo) {
         try {
             var clienteDeletado = clienteService.buscarPorCodigo(codigo);
-            clienteService.delete(codigo);
+            clienteService.delete(clienteDeletado.getCodigo());
             return ResponseEntity.status(HttpStatus.OK)
                     .body("Cliente: " + clienteDeletado.getNome() + " excluído com sucesso!");
         } catch (NoSuchElementException e) {
