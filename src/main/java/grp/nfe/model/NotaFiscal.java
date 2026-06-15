@@ -32,7 +32,7 @@ public class NotaFiscal {
     private LocalDate dataEmissao;
 
     @Column(nullable = false)
-    private BigDecimal valorTotal = BigDecimal.ZERO;
+    private Double valorTotal = 0;
 
     @OneToMany(mappedBy = "notaFiscal", cascade = CascadeType.ALL)
     private List<ItemNotaFiscal> itens = new ArrayList<>();

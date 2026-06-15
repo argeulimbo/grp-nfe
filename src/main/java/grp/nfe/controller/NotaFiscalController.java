@@ -16,6 +16,7 @@ public class NotaFiscalController {
     @Autowired
     private NotaFiscalService notaFiscalService;
 
+    @GetMapping
     public ResponseEntity<Iterable<NotaFiscal>> findAll() {
         var notas = notaFiscalService.buscarTodas();
         return ResponseEntity.ok(notas);

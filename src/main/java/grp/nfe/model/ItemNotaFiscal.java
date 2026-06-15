@@ -21,11 +21,11 @@ public class ItemNotaFiscal {
     private Long id;
 
     @ManyToOne()
-    @JoinColumn(name = "nota_fiscal_id")
+    @JoinColumn(name = "nota_fiscal_numero")
     private NotaFiscal notaFiscal;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "produto_id")
+    @JoinColumn(name = "produto_codigo")
     private Produto produto;
 
     @Column(nullable = false)
@@ -35,5 +35,5 @@ public class ItemNotaFiscal {
     private Integer quantidade;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal totalValor;
+    private Double totalValor;
 }
