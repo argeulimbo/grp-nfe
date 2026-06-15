@@ -36,7 +36,7 @@ public class NotaFiscalService {
         Cliente cliente = clienteService.buscarPorCodigo(notaFiscal.getCliente().getCodigo());
         notaFiscal.setCliente(cliente);
         notaFiscal.setDataEmissao(LocalDate.now());
-        notaFiscal.setValorTotal(BigDecimal.ZERO);
+        notaFiscal.setValorTotal(0.0);
         return notaFiscalRepository.save(notaFiscal);
     }
 

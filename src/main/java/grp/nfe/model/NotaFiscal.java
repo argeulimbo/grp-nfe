@@ -3,7 +3,6 @@ package grp.nfe.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,7 @@ public class NotaFiscal {
     private LocalDate dataEmissao;
 
     @Column(nullable = false)
-    private Double valorTotal = 0;
+    private Double valorTotal;
 
     @OneToMany(mappedBy = "notaFiscal", cascade = CascadeType.ALL)
     private List<ItemNotaFiscal> itens = new ArrayList<>();
