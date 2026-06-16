@@ -1,5 +1,6 @@
 package grp.nfe.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,6 +34,7 @@ public class NotaFiscal {
     @Column(nullable = false)
     private Double valorTotal;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "notaFiscal", cascade = CascadeType.ALL)
     private List<ItemNotaFiscal> itens = new ArrayList<>();
 

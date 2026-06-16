@@ -1,5 +1,7 @@
 package grp.nfe.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -20,6 +22,7 @@ public class ItemNotaFiscal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonBackReference
     @ManyToOne()
     @JoinColumn(name = "nota_fiscal_numero")
     private NotaFiscal notaFiscal;
