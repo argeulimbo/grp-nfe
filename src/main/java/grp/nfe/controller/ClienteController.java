@@ -36,14 +36,19 @@ public class ClienteController {
 
     @GetMapping("/buscar")
     public ResponseEntity<List<Cliente>> findByNome(@RequestParam String nome){
-        List<Cliente> clientes =
-                clienteService.buscarPorNome(nome);
-
-        if (clientes.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(clientes);
+        try {
+            List<Cliente> clientes =
+                    clienteService.buscarPorNome(nome);
+            if (clientes.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(clientes);
+            }
+            return ResponseEntity.ok(clientes);
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException("ERRO Cliente não encontrado com o parâmetro fornecido!");
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e.getMessage());
         }
-        return ResponseEntity.ok(clientes);
     }
 
     @PostMapping
@@ -63,7 +68,7 @@ public class ClienteController {
         try {
             var cliente = clienteService.update(codigo, clienteToUpdate);
             return ResponseEntity.status(HttpStatus.OK)
-                    .body("Cliente " + cliente.getNome() + " com sucesso!");
+                    .body("Cliente " + cliente.getNome() + " atualizado com sucesso!");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(e.getMessage());

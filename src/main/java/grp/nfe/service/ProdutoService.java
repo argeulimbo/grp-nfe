@@ -21,7 +21,7 @@ public class ProdutoService {
 
     public Produto buscarPorCodigo(Integer codigo) {
         Optional<Produto> produto = produtoRepository.findByCodigo(codigo);
-        return produto.orElseThrow(() -> new NoSuchElementException("Nenhum produto encontrado com o código fornecido!"));
+        return produto.orElseThrow(() -> new NoSuchElementException("ERRO: Nenhum produto encontrado com o código fornecido!"));
     }
 
     public List<Produto> buscarPordescricao(String descricao) {
@@ -30,7 +30,7 @@ public class ProdutoService {
 
     public Produto create(Produto produto) {
         if (produtoRepository.findByCodigo(produto.getCodigo()).isPresent()) {
-            throw new IllegalArgumentException("Já existe produto cadastrado com o mesmo código!");
+            throw new IllegalArgumentException("ERRO: Já existe produto cadastrado com o mesmo código!");
         }
         return produtoRepository.save(produto);
     }
@@ -38,7 +38,7 @@ public class ProdutoService {
     public Produto update(Integer codigo, Produto produtoToUpdate) {
         Produto produto =
                 produtoRepository.findByCodigo(codigo)
-                        .orElseThrow(() -> new IllegalArgumentException("Não existe produto cadastrado com este código!"));
+                        .orElseThrow(() -> new IllegalArgumentException("ERRO: Não existe produto cadastrado com este código!"));
         produto.setDescricao(produtoToUpdate.getDescricao());
         produto.setValorUnitario(produtoToUpdate.getValorUnitario());
         return produtoRepository.save(produto);
@@ -47,7 +47,7 @@ public class ProdutoService {
     public void delete(Integer codigo) {
         Produto produto =
                 produtoRepository.findByCodigo(codigo)
-                        .orElseThrow(() -> new IllegalArgumentException("Não existe produto com o código fornecido para exclusão!"));
+                        .orElseThrow(() -> new IllegalArgumentException("ERRO: Não existe produto com o código fornecido para exclusão!"));
         produtoRepository.delete(produto);
     }
 }

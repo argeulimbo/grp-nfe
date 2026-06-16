@@ -1,6 +1,7 @@
 package grp.nfe.controller;
 
 import grp.nfe.model.NotaFiscal;
+import grp.nfe.model.dto.NotaFiscalDTO;
 import grp.nfe.service.NotaFiscalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,7 @@ public class NotaFiscalController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody NotaFiscal notaFiscal) {
+    public ResponseEntity<Object> create(@RequestBody NotaFiscalDTO notaFiscal) {
         try {
             var nota = notaFiscalService.create(notaFiscal);
             return ResponseEntity.status(HttpStatus.CREATED)
