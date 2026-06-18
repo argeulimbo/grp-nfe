@@ -24,7 +24,7 @@ public class ClienteController {
     }
 
     @GetMapping("/{codigo}")
-    public ResponseEntity<Object> findByCodigo(@PathVariable Integer codigo){
+    public ResponseEntity<Object> findByCodigo(@PathVariable String codigo){
         try {
             var cliente = clienteService.buscarPorCodigo(codigo);
             return ResponseEntity.ok(cliente);
@@ -64,7 +64,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{codigo}")
-    public ResponseEntity<Object> update(@PathVariable Integer codigo, @RequestBody Cliente clienteToUpdate) {
+    public ResponseEntity<Object> update(@PathVariable String codigo, @RequestBody Cliente clienteToUpdate) {
         try {
             var cliente = clienteService.update(codigo, clienteToUpdate);
             return ResponseEntity.status(HttpStatus.OK)
@@ -79,7 +79,7 @@ public class ClienteController {
     }
 
     @DeleteMapping("/{codigo}")
-    public ResponseEntity<Object> delete(@PathVariable Integer codigo) {
+    public ResponseEntity<Object> delete(@RequestBody String codigo) {
         try {
             var clienteDeletado = clienteService.buscarPorCodigo(codigo);
             clienteService.delete(clienteDeletado.getCodigo());

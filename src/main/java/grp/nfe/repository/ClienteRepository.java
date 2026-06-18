@@ -8,10 +8,7 @@ import java.util.Optional;
 
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
-    Optional<Cliente> findByCodigo(Integer codigo);
-    Optional<Cliente> findByNome(String nome);
-
-    boolean existsByCodigo(Integer codigo);
+    Optional<Cliente> findByCodigo(String codigo);
 
     List<Cliente> findByNomeContainingIgnoreCase(String nome);
 }

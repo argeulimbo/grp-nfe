@@ -19,7 +19,7 @@ public class ClienteService {
         return clienteRepository.findAll();
     }
 
-    public Cliente buscarPorCodigo(Integer codigo) {
+    public Cliente buscarPorCodigo(String codigo) {
         Optional<Cliente> cliente = clienteRepository.findByCodigo(codigo);
         return cliente.orElseThrow(() -> new NoSuchElementException("ERRO: Nenhum cliente encontrado com o código fornecido"));
     }
@@ -34,7 +34,7 @@ public class ClienteService {
         }
 
         // Valida codigo
-        if (cliente.getCodigo() == null || cliente.getCodigo() < 0) {
+        if (cliente.getCodigo() == null || cliente.getCodigo().isBlank()) {
             throw new IllegalArgumentException("ERRO: O código do cliente não pode ser nulo ou menor que 0");
         }
 
@@ -42,19 +42,10 @@ public class ClienteService {
         if (cliente.getNome() == null || cliente.getNome().isBlank()) {
             throw new IllegalArgumentException("ERRO: O nome do cliente não pode ser nulo ou vazio.");
         }
-        /*
-                Comentar: Validações anteriores excluem as abaixo
-         */
-        if (cliente.getCodigo() == null && cliente.getNome() == null) {
-            throw new IllegalArgumentException("ERRO: Código e Nome do Cliente não podem ser nulos");
-        }
-        if (cliente.getCodigo() > 0 && cliente.getNome().isBlank()) {
-            throw new IllegalArgumentException("ERRO: Nenhum parâmetro informado para o Cliente");
-        }
         return clienteRepository.save(cliente);
     }
 
-    public Cliente update(Integer codigo, Cliente clienteToUpdate) {
+    public Cliente update(String codigo, Cliente clienteToUpdate) {
         if (clienteToUpdate.getNome() == null || clienteToUpdate.getNome().isBlank()) {
             throw new IllegalArgumentException("ERRO: O nome não foi informado para alterar!");
         }
@@ -65,7 +56,7 @@ public class ClienteService {
         return clienteRepository.save(cliente);
     }
 
-    public void delete(Integer codigo) {
+    public void delete(String codigo) {
         Cliente cliente =
                 clienteRepository.findByCodigo(codigo)
                         .orElseThrow(() -> new IllegalArgumentException("ERRO: Não existe cliente com o código fornecido para exclusão!"));

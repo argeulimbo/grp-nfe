@@ -24,7 +24,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/{codigo}")
-    public ResponseEntity<Object> findByCodigo(@PathVariable Integer codigo) {
+    public ResponseEntity<Object> findByCodigo(@PathVariable String codigo) {
         try {
             var cliente = produtoService.buscarPorCodigo(codigo);
             return ResponseEntity.ok(cliente);
@@ -58,7 +58,7 @@ public class ProdutoController {
     }
 
     @PutMapping("/{codigo}")
-    public ResponseEntity<Object> update(@PathVariable Integer codigo, @RequestBody Produto produtoToUpdate) {
+    public ResponseEntity<Object> update(@PathVariable String codigo, @RequestBody Produto produtoToUpdate) {
         try {
             var produto = produtoService.update(codigo, produtoToUpdate);
             return ResponseEntity.status(HttpStatus.OK)
@@ -73,7 +73,7 @@ public class ProdutoController {
     }
 
     @DeleteMapping("/{codigo}")
-    public ResponseEntity<Object> delete(@PathVariable Integer codigo) {
+    public ResponseEntity<Object> delete(@RequestBody String codigo) {
         try {
             var produtoDeletado = produtoService.buscarPorCodigo(codigo);
             produtoService.delete(produtoDeletado.getCodigo());

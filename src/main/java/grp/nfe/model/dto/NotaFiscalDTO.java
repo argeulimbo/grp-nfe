@@ -12,12 +12,12 @@ import java.util.List;
 public class NotaFiscalDTO {
 
     private Integer numero;
-    private Integer codigoCliente;
+    private String codigoCliente;
     private List<ItemNotaFiscalDTO> itens;
 
     @Data
     public static class ItemNotaFiscalDTO {
-        private Integer codigoProduto;
+        private String codigoProduto;
         private Integer quantidade;
     }
 

@@ -19,7 +19,7 @@ public class ProdutoService {
         return produtoRepository.findAll();
     }
 
-    public Produto buscarPorCodigo(Integer codigo) {
+    public Produto buscarPorCodigo(String codigo) {
         Optional<Produto> produto = produtoRepository.findByCodigo(codigo);
         return produto.orElseThrow(() -> new NoSuchElementException("ERRO: Nenhum produto encontrado com o código fornecido!"));
     }
@@ -35,7 +35,7 @@ public class ProdutoService {
         return produtoRepository.save(produto);
     }
 
-    public Produto update(Integer codigo, Produto produtoToUpdate) {
+    public Produto update(String codigo, Produto produtoToUpdate) {
         Produto produto =
                 produtoRepository.findByCodigo(codigo)
                         .orElseThrow(() -> new IllegalArgumentException("ERRO: Não existe produto cadastrado com este código!"));
@@ -44,7 +44,7 @@ public class ProdutoService {
         return produtoRepository.save(produto);
     }
 
-    public void delete(Integer codigo) {
+    public void delete(String codigo) {
         Produto produto =
                 produtoRepository.findByCodigo(codigo)
                         .orElseThrow(() -> new IllegalArgumentException("ERRO: Não existe produto com o código fornecido para exclusão!"));
