@@ -7,6 +7,7 @@ import grp.nfe.model.Produto;
 import grp.nfe.model.dto.NotaFiscalDTO;
 import grp.nfe.repository.ItemNotaFiscalRepository;
 import grp.nfe.repository.NotaFiscalRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,7 @@ public class NotaFiscalService {
                 .orElseThrow(() -> new NoSuchElementException("ERRO: Nenhuma nota fiscal encontrada!"));
     }
 
+    @Transactional
     public NotaFiscal create(NotaFiscalDTO notaFiscal) {
         if (notaFiscal.getNumero() == null) {
             throw new IllegalArgumentException("ERRO: Número da nota é obrigatório!");
@@ -104,9 +106,9 @@ public class NotaFiscalService {
             if (!notaFiscalToUpdate.getNumero().equals(numero) && notaFiscalRepository.findByNumero(notaFiscalToUpdate.getNumero()).isPresent()) {
                 throw new IllegalArgumentException("ERRO: Já existe nota cadastrada com este número!");
             }
-            if (notaFiscalToUpdate.getCliente().getCodigo() == null
-                    || notaFiscalToUpdate.getCliente().getCodigo().isBlank()
-                    || notaFiscalToUpdate.getCliente() == null) {
+            if (notaFiscalToUpdate.getCliente() == null
+                    || notaFiscalToUpdate.getCliente().getCodigo() == null
+                    || notaFiscalToUpdate.getCliente().getCodigo().isBlank()) {
                 throw new IllegalArgumentException("ERRO: O código do cliente é obrigatório!");
             }
 
@@ -114,13 +116,37 @@ public class NotaFiscalService {
 
             notaAntiga.setNumero(notaFiscalToUpdate.getNumero());
             notaAntiga.setCliente(clienteNota);
+            notaAntiga.getItens().clear();
+            int numeroItem = 1;
+            Double totalNota = 0.0;
+            for (ItemNotaFiscal item : notaFiscalToUpdate.getItens()) {
+                Produto produto = produtoService.buscarPorCodigo(
+                        item.getProduto().getCodigo());
+
+                Double totalItem =
+                        produto.getValorUnitario() * item.getQuantidade();
+
+                ItemNotaFiscal novoItem = new ItemNotaFiscal(
+                        null,
+                        notaAntiga,
+                        produto,
+                        numeroItem,
+                        item.getQuantidade(),
+                        totalItem
+                );
+                notaAntiga.getItens().add(novoItem);
+                totalNota += totalItem;
+                numeroItem++;
+            }
+            notaAntiga.setValorTotal(totalNota);
+
             notaAntiga.setDataEmissao(
                     notaFiscalToUpdate.getDataEmissao() != null ? notaFiscalToUpdate.getDataEmissao() : notaAntiga.getDataEmissao()
             );
-
             return notaFiscalRepository.save(notaAntiga);
     }
 
+    @Transactional
     public void delete(Integer numero) {
         NotaFiscal notaFiscalDeletar =
                 notaFiscalRepository.findByNumero(numero)

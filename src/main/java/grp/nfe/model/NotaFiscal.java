@@ -35,7 +35,7 @@ public class NotaFiscal {
     private Double valorTotal;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "notaFiscal", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "notaFiscal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemNotaFiscal> itens = new ArrayList<>();
 
 
