@@ -27,7 +27,6 @@ public class NotaFiscalService {
 
     @Autowired
     private ItemNotaFiscalRepository itemNotaFiscalRepository;
-    private Cliente clienteNota;
 
     public Iterable<NotaFiscal> buscarTodas() {
         return notaFiscalRepository.findAll();
@@ -102,18 +101,22 @@ public class NotaFiscalService {
             if (notaFiscalToUpdate.getNumero() == null) {
                 throw new IllegalArgumentException("ERRO: Número da nota é obrigatóriO!");
             }
-            if (!notaFiscalToUpdate.getNumero().equals(numero)) {
+            if (!notaFiscalToUpdate.getNumero().equals(numero) && notaFiscalRepository.findByNumero(notaFiscalToUpdate.getNumero()).isPresent()) {
                 throw new IllegalArgumentException("ERRO: Já existe nota cadastrada com este número!");
             }
-            if (notaFiscalToUpdate.getCliente().getCodigo() == null || notaFiscalToUpdate.getCliente().getCodigo().isBlank()) {
+            if (notaFiscalToUpdate.getCliente().getCodigo() == null
+                    || notaFiscalToUpdate.getCliente().getCodigo().isBlank()
+                    || notaFiscalToUpdate.getCliente() == null) {
                 throw new IllegalArgumentException("ERRO: O código do cliente é obrigatório!");
             }
 
             Cliente clienteNota = clienteService.buscarPorCodigo(notaFiscalToUpdate.getCliente().getCodigo());
 
             notaAntiga.setNumero(notaFiscalToUpdate.getNumero());
-            notaAntiga.setCliente(notaFiscalToUpdate.getCliente());
-            notaAntiga.setDataEmissao(notaFiscalToUpdate.getDataEmissao());
+            notaAntiga.setCliente(clienteNota);
+            notaAntiga.setDataEmissao(
+                    notaFiscalToUpdate.getDataEmissao() != null ? notaFiscalToUpdate.getDataEmissao() : notaAntiga.getDataEmissao()
+            );
 
             return notaFiscalRepository.save(notaAntiga);
     }
