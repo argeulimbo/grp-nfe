@@ -79,7 +79,7 @@ public class ClienteController {
     }
 
     @DeleteMapping("/{codigo}")
-    public ResponseEntity<Object> delete(@RequestBody String codigo) {
+    public ResponseEntity<Object> delete(@PathVariable String codigo) {
         try {
             var clienteDeletado = clienteService.buscarPorCodigo(codigo);
             clienteService.delete(clienteDeletado.getCodigo());
