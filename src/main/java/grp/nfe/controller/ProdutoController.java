@@ -73,7 +73,7 @@ public class ProdutoController {
     }
 
     @DeleteMapping("/{codigo}")
-    public ResponseEntity<Object> delete(@RequestBody String codigo) {
+    public ResponseEntity<Object> delete(@PathVariable String codigo) {
         try {
             var produtoDeletado = produtoService.buscarPorCodigo(codigo);
             produtoService.delete(produtoDeletado.getCodigo());
