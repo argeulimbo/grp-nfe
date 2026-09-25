@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class NotaFiscalDTO {
 
-    private Integer numero;
+    private String numero;
     private String codigoCliente;
     private List<ItemNotaFiscalDTO> itens;
 

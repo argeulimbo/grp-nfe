@@ -33,7 +33,7 @@ public class NotaFiscalService {
         return notaFiscalRepository.findAll();
     }
 
-    public NotaFiscal buscarPorNumero(Integer numero) {
+    public NotaFiscal buscarPorNumero(String numero) {
         return notaFiscalRepository.findByNumero(numero)
                 .orElseThrow(() -> new NoSuchElementException("ERRO: Nenhuma nota fiscal encontrada!"));
     }
@@ -97,7 +97,7 @@ public class NotaFiscalService {
         return notaFiscalRepository.save(nota);
     }
 
-    public NotaFiscal update(Integer numero, NotaFiscal notaFiscalToUpdate) {
+    public NotaFiscal update(String numero, NotaFiscal notaFiscalToUpdate) {
             NotaFiscal notaAntiga = buscarPorNumero(numero);
 
             if (notaFiscalToUpdate.getNumero() == null) {
@@ -147,7 +147,7 @@ public class NotaFiscalService {
     }
 
     @Transactional
-    public void delete(Integer numero) {
+    public void delete(String numero) {
         NotaFiscal notaFiscalDeletar =
                 notaFiscalRepository.findByNumero(numero)
                         .orElseThrow(() -> new NoSuchElementException("ERRO: Não existe nota fiscal cadastrada com este número."));

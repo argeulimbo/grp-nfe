@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface NotaFiscalRepository extends JpaRepository<NotaFiscal, Integer> {
 
-    boolean existsByNumero(Integer numero);
-    Optional<NotaFiscal> findByNumero(Integer numero);
+    boolean existsByNumero(String numero);
+    Optional<NotaFiscal> findByNumero(String numero);
 
 }

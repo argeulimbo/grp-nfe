@@ -24,7 +24,7 @@ public class NotaFiscalController {
     }
 
     @GetMapping("/{numero}")
-    public ResponseEntity<Object> findByNumero(@PathVariable Integer numero) {
+    public ResponseEntity<Object> findByNumero(@PathVariable String numero) {
         try {
             var nota = notaFiscalService.buscarPorNumero(numero);
             return  ResponseEntity.ok(nota);
@@ -50,7 +50,7 @@ public class NotaFiscalController {
     }
 
     @PutMapping("/{numero}")
-    public ResponseEntity<Object> update(@PathVariable Integer numero, @RequestBody NotaFiscal notaFiscal) {
+    public ResponseEntity<Object> update(@PathVariable String numero, @RequestBody NotaFiscal notaFiscal) {
         try {
             var nota = notaFiscalService.update(numero, notaFiscal);
             return ResponseEntity.status(HttpStatus.OK)
@@ -65,7 +65,7 @@ public class NotaFiscalController {
     }
 
     @DeleteMapping("/{numero}")
-    public ResponseEntity<Object> delete(@PathVariable Integer numero) {
+    public ResponseEntity<Object> delete(@PathVariable String numero) {
         try {
             notaFiscalService.delete(numero);
             return ResponseEntity.ok("Nota fiscal " + numero + " excluída com sucesso!");

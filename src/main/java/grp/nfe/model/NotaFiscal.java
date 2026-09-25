@@ -22,7 +22,7 @@ public class NotaFiscal {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private Integer numero;
+    private String numero;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "cliente_codigo")
