@@ -49,6 +49,11 @@ public class ClienteService {
         if (clienteToUpdate.getNome() == null || clienteToUpdate.getNome().isBlank()) {
             throw new IllegalArgumentException("ERRO: O nome não foi informado para alterar!");
         }
+        String novoCodigo = clienteToUpdate.getCodigo();
+        if (!codigo.equals(novoCodigo) && clienteRepository.findByCodigo(novoCodigo).isPresent()) {
+            throw new IllegalArgumentException("ERRO: Já existe um cliente com o código.");
+        }
+
         Cliente cliente =
                 clienteRepository.findByCodigo(codigo)
                         .orElseThrow(() -> new IllegalArgumentException("ERRO: Não existe cliente cadastrado com este código!"));
