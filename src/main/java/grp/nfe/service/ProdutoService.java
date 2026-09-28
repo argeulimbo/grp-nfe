@@ -1,7 +1,9 @@
 package grp.nfe.service;
 
 import grp.nfe.model.Produto;
+import grp.nfe.repository.ItemNotaFiscalRepository;
 import grp.nfe.repository.ProdutoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,8 @@ public class ProdutoService {
 
     @Autowired
     private ProdutoRepository produtoRepository;
+    @Autowired
+    private ItemNotaFiscalRepository itemNotaFiscalRepository;
 
     public Iterable<Produto> buscarTodosProdutos() {
         return produtoRepository.findAll();
@@ -28,9 +32,19 @@ public class ProdutoService {
         return produtoRepository.findByDescricaoContainingIgnoreCase(descricao);
     }
 
+    @Transactional
     public Produto create(Produto produto) {
         if (produtoRepository.findByCodigo(produto.getCodigo()).isPresent()) {
             throw new IllegalArgumentException("ERRO: Já existe produto cadastrado com o mesmo código!");
+        }
+        if (produto.getValorUnitario() == null || produto.getValorUnitario() < 0) {
+            throw new NoSuchElementException("ERRO: Valor unitário não pode ser nulo ou menor que 0");
+        }
+        if (produto.getDescricao() == null || produto.getDescricao().isBlank()) {
+            throw new IllegalArgumentException("ERRO: Informe a descrição do Produto.");
+        }
+        if (produto.getCodigo() == null || produto.getCodigo().isBlank()) {
+            throw new IllegalArgumentException("ERRO: Informe o código do Produto.");
         }
         return produtoRepository.save(produto);
     }
@@ -49,6 +63,10 @@ public class ProdutoService {
         Produto produto =
                 produtoRepository.findByCodigo(codigo)
                         .orElseThrow(() -> new IllegalArgumentException("ERRO: Não existe produto com o código fornecido para exclusão!"));
+
+        if (itemNotaFiscalRepository.existsByProduto_Codigo(produto.getCodigo())) {
+            throw new IllegalStateException("ERRO: Não é possível excluir o produto pois há vínculo com nota.");
+        }
         produtoRepository.delete(produto);
     }
 }

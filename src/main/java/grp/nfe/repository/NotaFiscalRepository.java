@@ -9,5 +9,5 @@ public interface NotaFiscalRepository extends JpaRepository<NotaFiscal, Integer>
 
     boolean existsByNumero(String numero);
     Optional<NotaFiscal> findByNumero(String numero);
-
+    boolean existsByCliente_Codigo(String codigo);
 }

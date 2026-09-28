@@ -8,5 +8,5 @@ import java.util.List;
 public interface ItemNotaFiscalRepository extends JpaRepository<ItemNotaFiscal,Integer> {
 
     List<ItemNotaFiscal> findByNotaFiscalNumeroOrderByNumeroItem(Integer numero);
-
+    boolean existsByProduto_Codigo(String codigo);
 }
