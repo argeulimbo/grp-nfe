@@ -53,6 +53,7 @@ public class ClienteService {
                 clienteRepository.findByCodigo(codigo)
                         .orElseThrow(() -> new IllegalArgumentException("ERRO: Não existe cliente cadastrado com este código!"));
         cliente.setNome(clienteToUpdate.getNome());
+        cliente.setCodigo(clienteToUpdate.getCodigo());
         return clienteRepository.save(cliente);
     }
 

@@ -39,6 +39,7 @@ public class ProdutoService {
         Produto produto =
                 produtoRepository.findByCodigo(codigo)
                         .orElseThrow(() -> new IllegalArgumentException("ERRO: Não existe produto cadastrado com este código!"));
+        produto.setCodigo(produtoToUpdate.getCodigo());
         produto.setDescricao(produtoToUpdate.getDescricao());
         produto.setValorUnitario(produtoToUpdate.getValorUnitario());
         return produtoRepository.save(produto);
