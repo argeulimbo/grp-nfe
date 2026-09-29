@@ -100,7 +100,7 @@ public class NotaFiscalService {
     public NotaFiscal update(String numero, NotaFiscal notaFiscalToUpdate) {
             NotaFiscal notaAntiga = buscarPorNumero(numero);
 
-            if (notaFiscalToUpdate.getNumero() == null) {
+            if (notaFiscalToUpdate.getNumero() == null || notaFiscalToUpdate.getNumero().isBlank()) {
                 throw new IllegalArgumentException("ERRO: Número da nota é obrigatóriO!");
             }
             if (!notaFiscalToUpdate.getNumero().equals(numero) && notaFiscalRepository.findByNumero(notaFiscalToUpdate.getNumero()).isPresent()) {
