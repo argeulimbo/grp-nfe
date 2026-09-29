@@ -3,7 +3,6 @@ package grp.nfe.service;
 import grp.nfe.model.Produto;
 import grp.nfe.repository.ItemNotaFiscalRepository;
 import grp.nfe.repository.ProdutoRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,24 +31,35 @@ public class ProdutoService {
         return produtoRepository.findByDescricaoContainingIgnoreCase(descricao);
     }
 
-    @Transactional
     public Produto create(Produto produto) {
-        if (produtoRepository.findByCodigo(produto.getCodigo()).isPresent()) {
-            throw new IllegalArgumentException("ERRO: Já existe produto cadastrado com o mesmo código!");
-        }
-        if (produto.getValorUnitario() == null || produto.getValorUnitario() < 0) {
-            throw new NoSuchElementException("ERRO: Valor unitário não pode ser nulo ou menor que 0");
+        if (produto.getCodigo() == null || produto.getCodigo().isBlank()) {
+            throw new NoSuchElementException("ERRO: Informe o código do Produto.");
         }
         if (produto.getDescricao() == null || produto.getDescricao().isBlank()) {
             throw new IllegalArgumentException("ERRO: Informe a descrição do Produto.");
         }
-        if (produto.getCodigo() == null || produto.getCodigo().isBlank()) {
-            throw new IllegalArgumentException("ERRO: Informe o código do Produto.");
+        if (produto.getValorUnitario() == null || produto.getValorUnitario() < 0) {
+            throw new NoSuchElementException("ERRO: Valor unitário não pode ser nulo ou menor que 0");
         }
+        if (produtoRepository.findByCodigo(produto.getCodigo()).isPresent()) {
+            throw new IllegalArgumentException("ERRO: Já existe produto cadastrado com o mesmo código!");
+        }
+
         return produtoRepository.save(produto);
     }
 
     public Produto update(String codigo, Produto produtoToUpdate) {
+        if (produtoToUpdate.getDescricao() == null || produtoToUpdate.getDescricao().isBlank()) {
+            throw new IllegalArgumentException("ERRO: A descrição do produto não pode ser nula ou vazia");
+        }
+        if (produtoToUpdate.getCodigo() == null || produtoToUpdate.getCodigo().isBlank()) {
+            throw new IllegalArgumentException("ERRO: O Produto deve ter um código");
+        }
+        String novoCodigo = produtoToUpdate.getCodigo();
+        if (!codigo.equals(novoCodigo) && produtoRepository.findByCodigo(novoCodigo).isPresent()) {
+            throw new IllegalArgumentException("ERRO: Já existe um produto com o código");
+        }
+
         Produto produto =
                 produtoRepository.findByCodigo(codigo)
                         .orElseThrow(() -> new IllegalArgumentException("ERRO: Não existe produto cadastrado com este código!"));

@@ -19,13 +19,13 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @GetMapping
-    public ResponseEntity<Iterable<Cliente>> findAll(){
+    public ResponseEntity<Iterable<Cliente>> findAll() {
         var cliente = clienteService.buscarTodosClientes();
         return ResponseEntity.ok(cliente);
     }
 
     @GetMapping("/{codigo}")
-    public ResponseEntity<Object> findByCodigo(@PathVariable String codigo){
+    public ResponseEntity<Object> findByCodigo(@PathVariable String codigo) {
         try {
             var cliente = clienteService.buscarPorCodigo(codigo);
             return ResponseEntity.ok(cliente);
@@ -36,7 +36,7 @@ public class ClienteController {
     }
 
     @GetMapping("/buscar")
-    public ResponseEntity<List<Cliente>> findByNome(@RequestParam String nome){
+    public ResponseEntity<List<Cliente>> findByNome(@RequestParam String nome) {
         try {
             List<Cliente> clientes =
                     clienteService.buscarPorNome(nome);
@@ -58,16 +58,16 @@ public class ClienteController {
             var cliente = clienteService.create(clienteToCreate);
             return ResponseEntity.status(HttpStatus.OK)
                     .body("Cliente: " + cliente.getNome() + " criado com sucesso!");
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(e.getMessage());
-        } catch(NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(e.getMessage());
-        } catch(DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(e.getMessage());
-        } catch(Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(e.getMessage());
         }
