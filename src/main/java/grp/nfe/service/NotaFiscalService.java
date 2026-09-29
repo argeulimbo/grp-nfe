@@ -59,7 +59,7 @@ public class NotaFiscalService {
         Cliente cliente =
                 clienteService.buscarPorCodigo(notaFiscal.getCodigoCliente());
 
-        NotaFiscal nota =  new NotaFiscal();
+        NotaFiscal nota = new NotaFiscal();
         nota.setNumero(notaFiscal.getNumero());
         nota.setCliente(cliente);
         nota.setDataEmissao(LocalDate.now());
@@ -90,7 +90,7 @@ public class NotaFiscalService {
                     totalItem
             );
             itemNotaFiscalRepository.save(item);
-            totalNota +=  totalItem;
+            totalNota += totalItem;
             numeroItem++;
         }
         nota.setValorTotal(totalNota);
@@ -98,52 +98,52 @@ public class NotaFiscalService {
     }
 
     public NotaFiscal update(String numero, NotaFiscal notaFiscalToUpdate) {
-            NotaFiscal notaAntiga = buscarPorNumero(numero);
+        NotaFiscal notaAntiga = buscarPorNumero(numero);
 
-            if (notaFiscalToUpdate.getNumero() == null || notaFiscalToUpdate.getNumero().isBlank()) {
-                throw new IllegalArgumentException("ERRO: Número da nota é obrigatóriO!");
-            }
-            if (!notaFiscalToUpdate.getNumero().equals(numero) && notaFiscalRepository.findByNumero(notaFiscalToUpdate.getNumero()).isPresent()) {
-                throw new IllegalArgumentException("ERRO: Já existe nota cadastrada com este número!");
-            }
-            if (notaFiscalToUpdate.getCliente() == null
-                    || notaFiscalToUpdate.getCliente().getCodigo() == null
-                    || notaFiscalToUpdate.getCliente().getCodigo().isBlank()) {
-                throw new IllegalArgumentException("ERRO: O código do cliente é obrigatório!");
-            }
+        if (notaFiscalToUpdate.getNumero() == null || notaFiscalToUpdate.getNumero().isBlank()) {
+            throw new IllegalArgumentException("ERRO: Número da nota é obrigatório!");
+        }
+        if (!notaFiscalToUpdate.getNumero().equals(numero) && notaFiscalRepository.findByNumero(notaFiscalToUpdate.getNumero()).isPresent()) {
+            throw new IllegalArgumentException("ERRO: Já existe nota cadastrada com este número!");
+        }
+        if (notaFiscalToUpdate.getCliente() == null
+                || notaFiscalToUpdate.getCliente().getCodigo() == null
+                || notaFiscalToUpdate.getCliente().getCodigo().isBlank()) {
+            throw new IllegalArgumentException("ERRO: O código do cliente é obrigatório!");
+        }
 
-            Cliente clienteNota = clienteService.buscarPorCodigo(notaFiscalToUpdate.getCliente().getCodigo());
+        Cliente clienteNota = clienteService.buscarPorCodigo(notaFiscalToUpdate.getCliente().getCodigo());
 
-            notaAntiga.setNumero(notaFiscalToUpdate.getNumero());
-            notaAntiga.setCliente(clienteNota);
-            notaAntiga.getItens().clear();
-            int numeroItem = 1;
-            Double totalNota = 0.0;
-            for (ItemNotaFiscal item : notaFiscalToUpdate.getItens()) {
-                Produto produto = produtoService.buscarPorCodigo(
-                        item.getProduto().getCodigo());
+        notaAntiga.setNumero(notaFiscalToUpdate.getNumero());
+        notaAntiga.setCliente(clienteNota);
+        notaAntiga.getItens().clear();
+        int numeroItem = 1;
+        Double totalNota = 0.0;
+        for (ItemNotaFiscal item : notaFiscalToUpdate.getItens()) {
+            Produto produto = produtoService.buscarPorCodigo(
+                    item.getProduto().getCodigo());
 
-                Double totalItem =
-                        produto.getValorUnitario() * item.getQuantidade();
+            Double totalItem =
+                    produto.getValorUnitario() * item.getQuantidade();
 
-                ItemNotaFiscal novoItem = new ItemNotaFiscal(
-                        null,
-                        notaAntiga,
-                        produto,
-                        numeroItem,
-                        item.getQuantidade(),
-                        totalItem
-                );
-                notaAntiga.getItens().add(novoItem);
-                totalNota += totalItem;
-                numeroItem++;
-            }
-            notaAntiga.setValorTotal(totalNota);
-
-            notaAntiga.setDataEmissao(
-                    notaFiscalToUpdate.getDataEmissao() != null ? notaFiscalToUpdate.getDataEmissao() : notaAntiga.getDataEmissao()
+            ItemNotaFiscal novoItem = new ItemNotaFiscal(
+                    null,
+                    notaAntiga,
+                    produto,
+                    numeroItem,
+                    item.getQuantidade(),
+                    totalItem
             );
-            return notaFiscalRepository.save(notaAntiga);
+            notaAntiga.getItens().add(novoItem);
+            totalNota += totalItem;
+            numeroItem++;
+        }
+        notaAntiga.setValorTotal(totalNota);
+
+        notaAntiga.setDataEmissao(
+                notaFiscalToUpdate.getDataEmissao() != null ? notaFiscalToUpdate.getDataEmissao() : notaAntiga.getDataEmissao()
+        );
+        return notaFiscalRepository.save(notaAntiga);
     }
 
     @Transactional
